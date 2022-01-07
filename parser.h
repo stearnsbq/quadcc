@@ -3,4 +3,4 @@
 
 
 
-AST_NODE parse(Lexic ** lexics);
+AST_NODE parse(Lexic ** lexics, int length);
