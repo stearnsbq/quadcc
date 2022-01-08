@@ -11,6 +11,7 @@ int lookup(const char *name)
         {"int", VARTYPE},
         {"void", VOID_KEYWORD},
         {"return", RETURN_KEYWORD},
+        {"if", IF_KEYWORD},
         {NULL, EOF}};
 
     for (item_t *p = table; p->name != NULL; ++p)
@@ -246,6 +247,10 @@ int main(int argc, char *argv[])
 
         lexics[size++] = *lexic;
     }
+
+    Lexic * endOfFile = malloc(sizeof(Lexic));
+    endOfFile->token = ENDOFFILE;
+    lexics[++size] = *endOfFile;
 
     for (int i = 0; i < size; i++)
     {

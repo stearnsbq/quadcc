@@ -7,19 +7,45 @@ struct AST_NODE
 {
     enum
     {
+        program_decl,
+        if_stmt,
         function_decl,
-        integer_exp,
-        variable_exp,
+        variable_decl,
+        return_stmt,
         binary_exp,
-        call_exp
+        call_exp,
     } tag;
 
     union
     {
 
-        int integerExp;
+        struct AST_NODE *returnStatement;
 
-        char *variableExp;
+        struct
+        {
+            char *type;
+            char *identifier;
+            union
+            {
+                int intValue;
+                char charValue;
+                struct callExp * func;
+                char * variable;
+            } init;
+        } variableDecl;
+
+        struct
+        {
+            struct binaryExp *test;
+            struct Exp_list *consequent;
+            struct Exp_list *alternate;
+        } ifStatement;
+
+        struct
+        {
+            char *name;
+            struct Exp_list *body;
+        } programDecl;
 
         struct
         {
@@ -31,12 +57,14 @@ struct AST_NODE
         struct
         {
             char *name;
-            struct Exp_list *arguments;
+            struct Exp_list *params;
+            char *returnType;
+            struct Exp_list *body;
         } funcDecl;
 
         struct
         {
-            char *name;
+            char *callee;
             struct Exp_list *arguments;
         } callExp;
 
@@ -48,5 +76,12 @@ typedef struct Exp_list
     AST_NODE *elem;
     struct Exp_list *next;
 } ast_list;
+
+AST_NODE *make_variableDecl(char *type, char *identifier, struct callExp * func, int intValue, char charValue, char * variable);
+AST_NODE *make_IfStatement(struct binaryExp *test, struct Exp_list *consequent, struct Exp_list *alternate);
+AST_NODE *make_progamDecl(char *name, struct Exp_list *body);
+AST_NODE *make_binaryExp(char *operator, AST_NODE * left, AST_NODE *right);
+AST_NODE *make_funcDecl(char *name, struct Exp_list *params, char *returnType, struct Exp_list *body);
+AST_NODE *make_callExp(char* callee, struct Exp_list *arguments);
 
 #endif
