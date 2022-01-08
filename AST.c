@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 
-AST_NODE *make_variableDecl(char *type, char *identifier, struct callExp * func, int intValue, char charValue, char * variable){
+AST_NODE *make_variableDecl(char *type, char *identifier, AST_NODE * func, int intValue, char charValue, char * variable){
     AST_NODE * newNode = malloc(sizeof(AST_NODE));
 
     newNode->tag = variable_decl;
@@ -18,7 +18,7 @@ AST_NODE *make_variableDecl(char *type, char *identifier, struct callExp * func,
     return newNode;
 }
 
-AST_NODE *make_IfStatement(struct binaryExp *test, struct Exp_list *consequent, struct Exp_list *alternate){
+AST_NODE *make_IfStatement(AST_NODE *test, AST_NODE *consequent, AST_NODE *alternate){
     AST_NODE * newNode = malloc(sizeof(AST_NODE));
 
     newNode->tag = if_stmt;

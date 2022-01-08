@@ -4,13 +4,16 @@
 #include "lexic.h"
 
 
-AST_NODE * program(Lexic * lexics);
-AST_NODE * parse(Lexic * lexics);
-ast_list * argDecl(Lexic * lexics);
-ast_list * funcBody(Lexic * lexics);
-ast_list * callArguments(Lexic * lexics);
-AST_NODE * ifStatement(Lexic * lexics);
-AST_NODE * variableDeclaration(Lexic * lexics);
-ast_list * argDecl(Lexic * lexics);
+Lexic * lexics;
+
+AST_NODE * program();
+AST_NODE * parse(Lexic * lexicsIn);
+ast_list * argDecl();
+ast_list * funcBody();
+ast_list * callArguments();
+AST_NODE * ifStatement();
+AST_NODE * variableDeclaration();
+ast_list * argDecl();
+AST_NODE * binaryExp();
 
 #endif

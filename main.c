@@ -149,19 +149,19 @@ int main(int argc, char *argv[])
         case ')':
         {
             memcpy(lexic->lexeme, &character, 1);
-            lexic->token = LEFT_PARENTHESIS;
+            lexic->token = RIGHT_PARENTHESIS;
             break;
         }
         case '{':
         {
             memcpy(lexic->lexeme, &character, 1);
-            lexic->token = RIGHT_BRACKET;
+            lexic->token = LEFT_BRACKET;
             break;
         }
         case '}':
         {
             memcpy(lexic->lexeme, &character, 1);
-            lexic->token = LEFT_BRACKET;
+            lexic->token = RIGHT_BRACKET;
             break;
         }
         case ',':
@@ -179,8 +179,11 @@ int main(int argc, char *argv[])
         case '=':
         {
 
-            if (i += lookAhead(sourceString, i, fileSize, '='))
-            {
+            int look = lookAhead(sourceString, i, fileSize, '=');
+
+            if (look)
+            {  
+                i += look; 
                 memcpy(lexic->lexeme, sourceString + i, 2);
                 lexic->token = BINOP;
                 break;
@@ -192,8 +195,11 @@ int main(int argc, char *argv[])
         }
         case '!':
         {
-            if (i += lookAhead(sourceString, i, fileSize, '='))
+            int look = lookAhead(sourceString, i, fileSize, '=');
+
+            if (look)
             {
+                i+=look;
                 memcpy(lexic->lexeme, sourceString + i, 2);
                 lexic->token = BINOP;
             }

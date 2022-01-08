@@ -1,2 +1,2 @@
 quadcc:
-	gcc main.c parser.c AST.c table.c -o quadcc
+	gcc main.c table.c AST.c parser.c -o main

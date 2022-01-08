@@ -1,8 +1,9 @@
 #include "parser.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 
-ast_list * argDecl(Lexic * lexics){
+ast_list * argDecl(){
 
     if(lexics->token == RIGHT_PARENTHESIS){
         return NULL;
@@ -50,7 +51,7 @@ ast_list * argDecl(Lexic * lexics){
     return head;
 }
 
-AST_NODE * funcDecl(Lexic * lexics){
+AST_NODE * funcDecl(){
 
     char *name;
     char *returnType;
@@ -73,6 +74,7 @@ AST_NODE * funcDecl(Lexic * lexics){
         printf("left parenthesis expected!\n");
         return NULL;
     }
+
     lexics++;
 
     ast_list * params = argDecl(lexics);
@@ -86,8 +88,7 @@ AST_NODE * funcDecl(Lexic * lexics){
     return make_funcDecl(name, params, returnType, body);
 }
 
-
-ast_list * funcBody(Lexic * lexics){
+ast_list * funcBody(){
 
     if(lexics->token != LEFT_BRACKET){
         printf("{ expected!\n");
@@ -101,11 +102,11 @@ ast_list * funcBody(Lexic * lexics){
 
     while(1){
 
-        AST_NODE * current;
+        AST_NODE * current = NULL;
 
         switch(lexics->token){
             case VARTYPE:{
-                current = variableDeclaration(lexics);
+                current = variableDeclaration();
                 break;
             }
             case IF_KEYWORD:{
@@ -114,6 +115,10 @@ ast_list * funcBody(Lexic * lexics){
             case RETURN_KEYWORD:{
                 break;
             }
+        }
+
+        if(current == NULL){
+            break;
         }
 
         cursor->elem = current;
@@ -125,12 +130,11 @@ ast_list * funcBody(Lexic * lexics){
     return head;
 }
 
-
-AST_NODE * variableDeclaration(Lexic * lexics){
+AST_NODE * variableDeclaration(){
 
     char * name = NULL;
     char * type = NULL;
-    struct callExp * func = NULL;
+    AST_NODE * func = NULL;
     int intValue;
     char charValue;
     char * variable = NULL;
@@ -163,7 +167,7 @@ AST_NODE * variableDeclaration(Lexic * lexics){
 
     switch(lexics->token){
         case NUMBER:{
-            intValue = lexics->lexeme;
+            intValue = atoi(lexics->lexeme);
             break;
         }
         case IDENTIFIER:{
@@ -174,7 +178,7 @@ AST_NODE * variableDeclaration(Lexic * lexics){
 
             if(lexics->token == LEFT_PARENTHESIS){ // function call
 
-                ast_list * args = callArguments(lexics);
+                ast_list * args = argDecl();
 
                 lexics++;
 
@@ -194,7 +198,7 @@ AST_NODE * variableDeclaration(Lexic * lexics){
             break;
         }
         case CHARACTER:{
-            charValue = lexics->lexeme;
+            charValue = lexics->lexeme[0];
            break; 
         }
     }
@@ -206,26 +210,57 @@ AST_NODE * variableDeclaration(Lexic * lexics){
         return NULL; 
     }
 
-    return make_variableDecl(type, name, intValue, charValue, func, variable);
+    return make_variableDecl(type, name, func, intValue, charValue, variable);
 }
 
 
-ast_list * callArguments(Lexic * lexics){
+AST_NODE * ifStatement(){
+
+    if(lexics->token != IF_KEYWORD){
+        return NULL;
+    }
+    lexics++;
+
+
+    if(lexics->token != LEFT_PARENTHESIS){
+        printf("( expected");
+        return NULL;
+    }
+    lexics++;
+
+
+    AST_NODE * test = binaryExp();
+    lexics++;
+
+
+    return make_IfStatement(test, NULL, NULL);
+}
+
+AST_NODE * binaryExp(){
+
+    char * operator;
+
+    AST_NODE * left;
+    AST_NODE * right;
+
+    if(lexics->token != IDENTIFIER || lexics->token != NUMBER){
+        printf("identifier or number expected\n");
+        return NULL;
+    }
+
+
+
 
 }
 
-AST_NODE * ifStatement(Lexic * lexics){
 
-}
-
-
-AST_NODE * program(Lexic * lexics){
+AST_NODE * program(){
 
     ast_list * head = malloc(sizeof(ast_list));
 
     ast_list * cursor = head;
 
-    while(1){
+    while(lexics->token != ENDOFFILE){
 
         AST_NODE * tmp = funcDecl(lexics);
 
@@ -248,7 +283,7 @@ AST_NODE * program(Lexic * lexics){
 }
 
 
-AST_NODE * parse(Lexic * lexics){
-
+AST_NODE * parse(Lexic * lexicsIn){
+    lexics = lexicsIn;
     return program(lexics);
 }

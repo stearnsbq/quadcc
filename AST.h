@@ -36,9 +36,9 @@ struct AST_NODE
 
         struct
         {
-            struct binaryExp *test;
-            struct Exp_list *consequent;
-            struct Exp_list *alternate;
+            AST_NODE *test;
+            AST_NODE *consequent;
+            AST_NODE *alternate;
         } ifStatement;
 
         struct
@@ -77,8 +77,8 @@ typedef struct Exp_list
     struct Exp_list *next;
 } ast_list;
 
-AST_NODE *make_variableDecl(char *type, char *identifier, struct callExp * func, int intValue, char charValue, char * variable);
-AST_NODE *make_IfStatement(struct binaryExp *test, struct Exp_list *consequent, struct Exp_list *alternate);
+AST_NODE *make_variableDecl(char *type, char *identifier, AST_NODE * func, int intValue, char charValue, char * variable);
+AST_NODE *make_IfStatement(AST_NODE *test, AST_NODE *consequent, AST_NODE *alternate);
 AST_NODE *make_progamDecl(char *name, struct Exp_list *body);
 AST_NODE *make_binaryExp(char *operator, AST_NODE * left, AST_NODE *right);
 AST_NODE *make_funcDecl(char *name, struct Exp_list *params, char *returnType, struct Exp_list *body);
