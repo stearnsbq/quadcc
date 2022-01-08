@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
         printf("=====\n");
     }
 
-    AST_NODE ast = parse(lexics);
+    AST_NODE * ast = parse(lexics);
 
     free(sourceString);
     free(lexics);
