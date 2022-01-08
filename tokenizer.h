@@ -1,12 +1,17 @@
+#ifndef TOKENIZER
+#define TOKENIZER
 #include "lexic.h"
 
-const char* KEYWORDS[] = {"int", "void", "return"};
+typedef struct item_t
+{
+    const char *name;
+    int value;
+} item_t;
 
-const int KEYWORDS_LEN = 3;
-
-int in(char ** arr, int len, char * target);
-
-int handleNumber(Lexic * lexic, char * source, int currIndex, int maxSize);
-char peek(char * source, int currIndex, int maxSize);
-int handleIdentifier(Lexic * lexic, char * source, int currIndex, int maxSize); 
-int lookAhead(char * source, int currIndex, int maxSize, char match);
+int lookup(const char *name);
+int in(char **arr, int len, char *target);
+int handleNumber(Lexic *lexic, char *source, int currIndex, int maxSize);
+char peek(char *source, int currIndex, int maxSize);
+int handleIdentifier(Lexic *lexic, char *source, int currIndex, int maxSize);
+int lookAhead(char *source, int currIndex, int maxSize, char match);
+#endif

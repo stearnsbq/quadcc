@@ -1,17 +1,20 @@
 #include "parser.h"
-#include <stdlib.h>
-
-AST_NODE parse(Lexic ** lexics, int length){
+#include <stdio.h>
 
 
-    AST_NODE * rootNode = malloc(sizeof(AST_NODE));
+
+AST_NODE program(Lexic * lexic){
 
 
-    for(int i = 0; i < length; i++){
-
-        Lexic * lex = lexics[i];
-
+    if(lexic->token != VARTYPE){
+        printf("Data Type expected!\n");
+        return NULL;
     }
 
+}
 
+
+AST_NODE parse(Lexic * lexics, int length){
+
+    return program(lexics);
 }

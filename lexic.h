@@ -1,3 +1,6 @@
+#ifndef LEXIC
+#define LEXIC
+
 typedef enum TokenType{
     LEFT_PARENTHESIS,
     RIGHT_PARENTHESIS,
@@ -21,3 +24,4 @@ typedef struct Lexic {
     char lexeme[32];
     TokenType token;
 } Lexic;
+#endif
