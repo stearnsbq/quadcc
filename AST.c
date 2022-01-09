@@ -2,6 +2,15 @@
 #include <stdlib.h>
 
 
+AST_NODE *make_integerExp(int value){
+    AST_NODE * newNode = malloc(sizeof(AST_NODE));
+
+    newNode->tag = integer_exp;
+    newNode->op.integerExp = value;
+
+    return newNode;
+}
+
 AST_NODE *make_variableDecl(char *type, char *identifier, AST_NODE * func, int intValue, char charValue, char * variable){
     AST_NODE * newNode = malloc(sizeof(AST_NODE));
 
@@ -18,7 +27,7 @@ AST_NODE *make_variableDecl(char *type, char *identifier, AST_NODE * func, int i
     return newNode;
 }
 
-AST_NODE *make_IfStatement(AST_NODE *test, AST_NODE *consequent, AST_NODE *alternate){
+AST_NODE *make_IfStatement(AST_NODE *test, ast_list *consequent, ast_list *alternate){
     AST_NODE * newNode = malloc(sizeof(AST_NODE));
 
     newNode->tag = if_stmt;

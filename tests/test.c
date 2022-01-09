@@ -1,3 +1,7 @@
+int test(){
+   return 0;
+}
+
 int main(){
-   int dome = 0;
+   int testVar = test();
 }

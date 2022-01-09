@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 
     sourceString[fileSize] = '\0';
 
-    Lexic *lexics = calloc(256, sizeof(Lexic));
+    Lexic *lexics = calloc(512, sizeof(Lexic));
 
     size_t size = 0;
 
@@ -183,8 +183,9 @@ int main(int argc, char *argv[])
 
             if (look)
             {  
-                i += look; 
+                
                 memcpy(lexic->lexeme, sourceString + i, 2);
+                i += look; 
                 lexic->token = BINOP;
                 break;
             }
@@ -199,8 +200,8 @@ int main(int argc, char *argv[])
 
             if (look)
             {
-                i+=look;
                 memcpy(lexic->lexeme, sourceString + i, 2);
+                i+=look;
                 lexic->token = BINOP;
             }
 
@@ -211,9 +212,12 @@ int main(int argc, char *argv[])
         case '<':
         case '>':
         {
-            if (i += lookAhead(sourceString, i, fileSize, '='))
+            int look = lookAhead(sourceString, i, fileSize, '=');
+
+            if (look)
             {
                 memcpy(lexic->lexeme, sourceString + i, 2);
+                i+=look;
                 lexic->token = BINOP;
                 break;
             }
@@ -227,6 +231,23 @@ int main(int argc, char *argv[])
         {
             memcpy(lexic->lexeme, &character, 1);
             lexic->token = BINOP;
+            break;
+        }
+        case '&':{
+            int look = lookAhead(sourceString, i, fileSize, '&');
+
+            if (look)
+            {
+                memcpy(lexic->lexeme, sourceString + i, 2);
+                i+=look;
+                lexic->token = BINOP;
+            }else{
+                printf("missing &\n");
+                exit(1);
+            }
+
+            break;
+
         }
         case '"':
         {
@@ -256,7 +277,8 @@ int main(int argc, char *argv[])
 
     Lexic * endOfFile = malloc(sizeof(Lexic));
     endOfFile->token = ENDOFFILE;
-    lexics[++size] = *endOfFile;
+
+    lexics[size++] = *endOfFile;
 
     for (int i = 0; i < size; i++)
     {
