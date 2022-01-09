@@ -137,7 +137,6 @@ Entry * get(SymbolTable * table, char * key){
     return NULL;
 }
 
-
 void clearTable(SymbolTable * table){
 
     for(int i = 0; i < table->size; i++){

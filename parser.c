@@ -229,13 +229,15 @@ ast_list *funcBody()
 
         cursor->elem = current;
 
+        lexics++;
+        
         if (lexics->token != RIGHT_BRACKET)
         {
             cursor->next = malloc(sizeof(ast_list));
             cursor = cursor->next;
         }
 
-        lexics++;
+
     }
 
     return head;
@@ -366,7 +368,11 @@ AST_NODE *returnStatement()
     }
     lexics++;
 
+    Lexic* state = lexics;
+
     AST_NODE *returnNode = malloc(sizeof(AST_NODE));
+
+    returnNode->tag = return_stmt;
 
     if (lexics->token == EOL)
     {
@@ -403,7 +409,15 @@ AST_NODE *returnStatement()
     lexics++;
 
     if(lexics->token == BINOP){
-        
+
+            free(returnNode->op.returnStatement);
+            
+            lexics = state;
+
+            returnNode->op.returnStatement = binaryExp();
+
+            state = lexics;
+
     }
 
     if (lexics->token != EOL)
