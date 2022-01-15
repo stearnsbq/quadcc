@@ -4,6 +4,7 @@
 #include "tokenizer.h"
 #include <ctype.h>
 #include "parser.h"
+#include "symboltable.h"
 
 int lookup(const char *name)
 {
@@ -290,6 +291,9 @@ int main(int argc, char *argv[])
     }
 
     AST_NODE * ast = parse(lexics);
+
+    SymbolTable * table = buildSymbolTable(ast);
+
 
     free(sourceString);
     free(lexics);

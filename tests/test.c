@@ -1,7 +1,3 @@
-int test(){
-   return 0;
-}
-
 int main(){
-   int testVar = test();
+   int a = 0;
 }

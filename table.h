@@ -1,26 +1,27 @@
 typedef struct Entry{
     char * identifier;
-    int scope;
     char * type;
     int empty;
     struct Entry * next;
 } Entry;
 
 
-typedef struct SymbolTable{
+typedef struct HashTable{
     Entry ** backing;
     int size;
-} SymbolTable;
+} HashTable;
 
 
-SymbolTable * allocate(int size);
+HashTable * allocate(int size);
 
-int hash(SymbolTable * table, char * key);
+int hash(HashTable * table, char * key);
 
-int set(SymbolTable * table, char* key, int scope, char * type);
+int set(HashTable * table, char* key, char * type);
 
-int rem(SymbolTable * table, char * key);
+int rem(HashTable * table, char * key);
 
-Entry * get(SymbolTable * table, char * key);
+Entry * get(HashTable * table, char * key);
 
-void clearTable(SymbolTable * table);
+int has(HashTable * table, char * key);
+
+void clearTable(HashTable * table);

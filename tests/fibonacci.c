@@ -9,7 +9,6 @@ int fib(int n)
   
 int main()
 {
-    int n = 9231;
     int result = fib(2);
     return 0;
 }

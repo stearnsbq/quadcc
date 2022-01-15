@@ -82,8 +82,13 @@ ast_list *callArgs()
             state = lexics;
         }
 
-        cursor->next = malloc(sizeof(ast_list));
-        cursor = cursor->next;
+
+        if(lexics->token != RIGHT_PARENTHESIS){
+            cursor->next = malloc(sizeof(ast_list));
+            cursor = cursor->next;
+        }
+
+
     }
     return head;
 }
@@ -507,9 +512,10 @@ AST_NODE *program()
 
         cursor->elem = tmp;
 
-        cursor->next = malloc(sizeof(ast_list));
-
-        cursor = cursor->next;
+        if(lexics->token != ENDOFFILE){
+            cursor->next = malloc(sizeof(ast_list));
+            cursor = cursor->next;
+        }
 
         //lexics++;
     }

@@ -3,11 +3,11 @@
 #include <string.h>
 #include <stdio.h>
 
-SymbolTable * allocate(int size){
+HashTable * allocate(int size){
 
-    SymbolTable * table = malloc(sizeof(SymbolTable));
+    HashTable * table = malloc(sizeof(HashTable));
 
-    table->backing = calloc(25, sizeof(Entry *));
+    table->backing = calloc(size, sizeof(Entry *));
     table->size = size;
 
     for(int i = 0; i < size; i++){
@@ -21,7 +21,7 @@ SymbolTable * allocate(int size){
 
 // hash func from https://stackoverflow.com/questions/34595/what-is-a-good-hash-function;
 
-int hash(SymbolTable * table, char * key){
+int hash(HashTable * table, char * key){
     unsigned h = 0x811c9dc5;
     int i;
 
@@ -31,14 +31,13 @@ int hash(SymbolTable * table, char * key){
    return h % table->size;
 }
 
-int set(SymbolTable * table, char* key, int scope, char * type){
+int set(HashTable * table, char* key, char * type){
 
     int index = hash(table, key);
 
     Entry * newEntry = malloc(sizeof(Entry));
 
     newEntry->identifier = key;
-    newEntry->scope = scope;
     newEntry->type = type;
     newEntry->empty = 0;
 
@@ -58,7 +57,7 @@ int set(SymbolTable * table, char* key, int scope, char * type){
     return 0;
 }
 
-int rem(SymbolTable * table,char * key){
+int rem(HashTable * table,char * key){
 
     int index = hash(table, key);
 
@@ -83,7 +82,7 @@ int rem(SymbolTable * table,char * key){
     Entry * prev = NULL;
 
 
-    while(cursor->next != NULL){
+    while(cursor != NULL){
         
         if(strcmp(cursor->identifier, key) == 0){
 
@@ -106,7 +105,7 @@ int rem(SymbolTable * table,char * key){
 
 }
 
-Entry * get(SymbolTable * table, char * key){
+Entry * get(HashTable * table, char * key){
 
     int index = hash(table, key);
 
@@ -117,15 +116,13 @@ Entry * get(SymbolTable * table, char * key){
         return NULL;
     }
 
-
-
     if(strcmp(entry->identifier, key) == 0){
         return entry;
     }
 
     Entry * cursor = entry;
 
-    while(cursor->next != NULL){
+    while(cursor != NULL){
         
         if(strcmp(cursor->identifier, key) == 0){
             return cursor;
@@ -137,7 +134,15 @@ Entry * get(SymbolTable * table, char * key){
     return NULL;
 }
 
-void clearTable(SymbolTable * table){
+int has(HashTable * table, char * key){
+    if(get(table, key) != NULL){
+        return 1;
+    }
+
+    return 0;
+}
+
+void clearTable(HashTable * table){
 
     for(int i = 0; i < table->size; i++){
         free(table->backing[i]);
