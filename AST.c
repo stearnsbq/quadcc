@@ -17,10 +17,14 @@ AST_NODE *make_variableDecl(char *type, char *identifier, AST_NODE * func, int i
     newNode->tag = variable_decl;
 
     newNode->op.variableDecl.identifier = identifier;
-    newNode->op.variableDecl.init.charValue = intValue;
-    newNode->op.variableDecl.init.intValue = charValue;
-    newNode->op.variableDecl.init.func = func;
-    newNode->op.variableDecl.init.variable = variable;
+    //newNode->op.variableDecl.init.charValue = charValue;
+    newNode->op.variableDecl.init.intValue = intValue;
+    //newNode->op.variableDecl.init.func = func;
+    //newNode->op.variableDecl.init.variable = variable;
+
+    if(func != NULL || intValue != MAX_INT || charValue != NULL || variable != NULL){
+        newNode->op.variableDecl.initalized = 1;
+    }
     
     newNode->op.variableDecl.type = type;
 
@@ -39,12 +43,13 @@ AST_NODE *make_IfStatement(AST_NODE *test, ast_list *consequent, ast_list *alter
     return newNode;
 }
 
-AST_NODE *make_progamDecl(char *name, struct Exp_list *body){
+AST_NODE *make_progamDecl(char *name, AST_NODE * main, struct Exp_list *body){
     AST_NODE * newNode = malloc(sizeof(AST_NODE));
 
     newNode->tag = program_decl;
 
     newNode->op.programDecl.body = body;
+    newNode->op.programDecl.main = main;
     newNode->op.programDecl.name = name;
 
 

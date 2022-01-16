@@ -1,6 +1,7 @@
 #include "parser.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 AST_NODE *funcCall()
 {
@@ -58,7 +59,7 @@ ast_list *callArgs()
                 break;
             }
 
-            cursor->elem = make_variableDecl(NULL, lexics->lexeme, NULL, NULL, NULL, NULL);
+            cursor->elem = make_variableDecl(NULL, lexics->lexeme, NULL, MAX_INT, NULL, NULL);
 
             break;
         }
@@ -119,7 +120,7 @@ ast_list *argDecl()
         return NULL;
     }
 
-    AST_NODE *decl = make_variableDecl(type, lexics->lexeme, NULL, NULL, NULL, NULL);
+    AST_NODE *decl = make_variableDecl(type, lexics->lexeme, NULL, MAX_INT, NULL, NULL);
     head->elem = decl;
     lexics++;
 
@@ -200,6 +201,7 @@ ast_list *funcBody()
     lexics++;
 
     ast_list *head = malloc(sizeof(ast_list));
+    head->next = NULL;
 
     ast_list *cursor = head;
 
@@ -240,6 +242,7 @@ ast_list *funcBody()
         {
             cursor->next = malloc(sizeof(ast_list));
             cursor = cursor->next;
+            cursor->next = NULL;
         }
 
 
@@ -254,7 +257,7 @@ AST_NODE *variableDeclaration()
     char *name = NULL;
     char *type = NULL;
     AST_NODE *func = NULL;
-    int intValue;
+    int intValue = MAX_INT;
     char charValue;
     char *variable = NULL;
 
@@ -276,7 +279,7 @@ AST_NODE *variableDeclaration()
 
     if (lexics->token == EOL)
     {
-        return make_variableDecl(type, name, NULL, NULL, NULL, NULL);
+        return make_variableDecl(type, name, NULL, MAX_INT, NULL, NULL);
     }
 
     if (lexics->token != EQUAL)
@@ -402,7 +405,7 @@ AST_NODE *returnStatement()
             }
             else
             {
-                returnNode->op.returnStatement = make_variableDecl(NULL, lexics->lexeme, NULL, NULL, NULL, NULL);
+                returnNode->op.returnStatement = make_variableDecl(NULL, lexics->lexeme, NULL, MAX_INT, NULL, NULL);
             }
         }
         else if (lexics->token == NUMBER)
@@ -447,7 +450,7 @@ AST_NODE *binaryExpBranch()
             return funcCall();
         }
 
-        return make_variableDecl(NULL, lexics->lexeme, NULL, NULL, NULL, NULL);
+        return make_variableDecl(NULL, lexics->lexeme, NULL, MAX_INT, NULL, NULL);
     }
     case NUMBER:
     {
@@ -497,13 +500,21 @@ AST_NODE *program()
 {
 
     ast_list *head = malloc(sizeof(ast_list));
+    head->next = NULL;
 
     ast_list *cursor = head;
+
+    struct funcDecl * mainFunc = NULL;
 
     while (lexics->token != ENDOFFILE)
     {
 
         AST_NODE *tmp = funcDecl(lexics);
+
+        if(strcmp(tmp->op.funcDecl.name, "main") == 0){
+            mainFunc = tmp;
+            continue;
+        }
 
         if (!tmp)
         {
@@ -520,7 +531,7 @@ AST_NODE *program()
         //lexics++;
     }
 
-    return make_progamDecl("test", head);
+    return make_progamDecl("test", mainFunc, head);
 }
 
 AST_NODE *parse(Lexic *lexicsIn)

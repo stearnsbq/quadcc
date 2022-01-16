@@ -1,6 +1,8 @@
 #ifndef AST
 #define AST
 
+#define MAX_INT 131072  // int value if not initalized (bigger than 16 bit)
+
 typedef struct AST_NODE AST_NODE;
 
 struct AST_NODE
@@ -26,6 +28,7 @@ struct AST_NODE
         {
             char *type;
             char *identifier;
+            int initalized;
             union
             {
                 int intValue;
@@ -45,6 +48,7 @@ struct AST_NODE
         struct
         {
             char *name;
+            AST_NODE * main;
             struct Exp_list *body;
         } programDecl;
 
@@ -82,7 +86,7 @@ typedef struct Exp_list
 AST_NODE *make_integerExp(int value);
 AST_NODE *make_variableDecl(char *type, char *identifier, AST_NODE * func, int intValue, char charValue, char * variable);
 AST_NODE *make_IfStatement(AST_NODE *test, ast_list *consequent, ast_list *alternate);
-AST_NODE *make_progamDecl(char *name, struct Exp_list *body);
+AST_NODE *make_progamDecl(char *name, AST_NODE * main, struct Exp_list *body);
 AST_NODE *make_binaryExp(char *operator, AST_NODE * left, AST_NODE *right);
 AST_NODE *make_funcDecl(char *name, struct Exp_list *params, char *returnType, struct Exp_list *body);
 AST_NODE *make_callExp(char* callee, struct Exp_list *arguments);

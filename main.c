@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include "parser.h"
 #include "symboltable.h"
+#include "ASM.h"
 
 int lookup(const char *name)
 {
@@ -95,7 +96,7 @@ int main(int argc, char *argv[])
     //     printf("Missing file to parse!");
     // }
 
-    char *fileName = "tests/fibonacci.c";
+    char *fileName = "tests/test.c";
 
     printf("file: %s\n", fileName);
 
@@ -294,6 +295,8 @@ int main(int argc, char *argv[])
 
     SymbolTable * table = buildSymbolTable(ast);
 
+
+    generateASM(table, ast);
 
     free(sourceString);
     free(lexics);

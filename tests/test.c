@@ -1,3 +1,4 @@
 int main(){
-   int a = 0;
+   int a = 69;
+   int b = 10;
 }
